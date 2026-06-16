@@ -1,0 +1,23 @@
+098	X
+003	C
+00E	N
+009	I			; 
+
+0F8	READ3(X)		; X contains the value to INC
+361	?NC XQ
+050	CHK_NO_S [14D8]		; We read in X and then we use an entry
+				; point that checks the C register 
+				; for alpha data. If there is alpha data we
+				; exit to the ALPHA DATA error message.
+				; CPU is in DECIMAL Mode
+0AE	A<>C [ALL]
+04E	C=0 [ALL]
+35C	R=12
+050	LD@R 1
+0AE	A<>C [ALL]
+01D	?NC XQ
+060	AD2_10	[1807]		; The mainframe subroutine AD2-10 at 1807
+				; performs C=A+C on two normalized decimal
+				; numbers. The answer will end up in C.
+0E8	WRIT3(X)
+3E0	RTN
